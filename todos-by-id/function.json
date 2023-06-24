@@ -10,7 +10,7 @@
         "put",
         "delete"
       ],
-      "route": "todos/{todoId:int}"
+      "route": "todos/{todoId}"
     },
     {
       "type": "http",

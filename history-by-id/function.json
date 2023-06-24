@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "route": "history/{todoId:int}"
+      "route": "history/{todoId}"
     },
     {
       "type": "http",
