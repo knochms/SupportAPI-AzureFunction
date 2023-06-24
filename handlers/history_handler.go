@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"azure-function-support-api/models"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -10,11 +11,11 @@ import (
 )
 
 func HandleHistoryById(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "HandleHistoryById called.")
+	fmt.Fprint(w, "HandleHistoryById called.\n")
 	urlPathSegments := strings.Split(r.URL.Path, "/")
 	todoIDString := urlPathSegments[2]
 	todoID, _ := uuid.Parse(todoIDString)
-	for IdOfTodo, historieOfTodo := range history_all {
+	for IdOfTodo, historieOfTodo := range models.History_all {
 		if IdOfTodo == todoID {
 			json.NewEncoder(w).Encode(historieOfTodo)
 		}

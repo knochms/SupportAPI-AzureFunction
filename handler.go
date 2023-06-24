@@ -22,6 +22,6 @@ func main() {
 	router.HandleFunc("/api/todo/responsibility/{responsibility}/status/{status}", handlers.HandleTodosResponsibilityWithStatus)
 	router.HandleFunc("/api/history/{todoId}", handlers.HandleHistoryById)
 
-	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
+	//log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, router))
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func HandleTodosResponsibilityWithStatus(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "HandleTodosResponsibilityWithStatus called.")
+	fmt.Fprint(w, "HandleTodosResponsibilityWithStatus called.\n")
 	url := r.URL.Path
 
 	url_split := strings.Split(url, "/")
@@ -17,7 +17,7 @@ func HandleTodosResponsibilityWithStatus(w http.ResponseWriter, r *http.Request)
 	status := url_split[5]
 
 	allTodosFromResponsibilitywithStatus := []models.Todo{}
-	for _, t := range todos {
+	for _, t := range models.Todos {
 		if t.Responsibility == responsibility && t.Status == status {
 			allTodosFromResponsibilitywithStatus = append(allTodosFromResponsibilitywithStatus, t)
 		}

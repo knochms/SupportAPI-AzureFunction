@@ -11,11 +11,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var todos []models.Todo = models.Todos
-var history_all map[uuid.UUID][]models.Todo
+//var todos []models.Todo = models.Todos
+//var history_all map[uuid.UUID][]models.Todo
 
 func HandleTodos(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "HandleTodos called.")
+	fmt.Fprint(w, "HandleTodos called.\n")
 	switch {
 	case r.Method == http.MethodGet:
 		// Handle GET /api/todos
@@ -31,7 +31,7 @@ func HandleTodos(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleTodoById(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "HandleTodoById called.")
+	fmt.Fprintf(w, "HandleTodoById called.\n")
 	switch {
 	case r.Method == http.MethodGet:
 		// Handle GET /api/todos/{todoID}
@@ -55,14 +55,14 @@ func HandleTodoById(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTodos(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "getTodos called.")
-	json.NewEncoder(w).Encode(todos)
+	fmt.Fprint(w, "getTodos called.\n")
+	json.NewEncoder(w).Encode(models.Todos)
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
 func createTodo(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "createTodo called.")
+	fmt.Fprint(w, "createTodo called.\n")
 	todo, err := models.ParseRequest(w, r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -74,7 +74,7 @@ func createTodo(w http.ResponseWriter, r *http.Request) {
 	todo.Assigned = false
 	todo.Status = "created"
 	todo.Responsibility = strings.ToLower(todo.Responsibility)
-	todos = append(todos, *todo)
+	models.Todos = append(models.Todos, *todo)
 
 	models.Update_History(*todo)
 
@@ -84,7 +84,7 @@ func createTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTodo(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "getTodo called.")
+	fmt.Fprint(w, "getTodo called.\n")
 	urlPathSegments := strings.Split(r.URL.Path, "/")
 
 	todoIDString := urlPathSegments[3]
@@ -96,7 +96,7 @@ func getTodo(w http.ResponseWriter, r *http.Request) {
 
 	var foundToDo models.Todo
 
-	for _, t := range todos {
+	for _, t := range models.Todos {
 		if t.Id == todoID {
 			foundToDo = t
 		}
@@ -108,7 +108,7 @@ func getTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateTodo(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "updateTodo called.")
+	fmt.Fprint(w, "updateTodo called.\n")
 	urlPathSegments := strings.Split(r.URL.Path, "/")
 	todoIDString := urlPathSegments[3]
 	todoID, err := uuid.Parse(todoIDString)
@@ -123,20 +123,20 @@ func updateTodo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	for i, t := range todos {
+	for i, t := range models.Todos {
 		if t.Id == todoID {
-			todos[i].Title = todo.Title
-			todos[i].Description = todo.Description
-			todos[i].Status = todo.Status
-			todos[i].Priority = todo.Priority
-			todos[i].ModifiedAt = time.Now()
-			todos[i].Responsibility = strings.ToLower(todo.Responsibility)
+			models.Todos[i].Title = todo.Title
+			models.Todos[i].Description = todo.Description
+			models.Todos[i].Status = todo.Status
+			models.Todos[i].Priority = todo.Priority
+			models.Todos[i].ModifiedAt = time.Now()
+			models.Todos[i].Responsibility = strings.ToLower(todo.Responsibility)
 
-			if todos[i].Status == "done" {
-				todos[i].CompletedAt = time.Now()
+			if models.Todos[i].Status == "done" {
+				models.Todos[i].CompletedAt = time.Now()
 			}
 
-			update_History(todos[i])
+			update_History(models.Todos[i])
 
 			w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 			w.WriteHeader(http.StatusOK)
@@ -149,7 +149,7 @@ func updateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteTodo(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "deleteTodo called.")
+	fmt.Fprint(w, "deleteTodo called.\n")
 	urlPathSegments := strings.Split(r.URL.Path, "/")
 	todoIDString := urlPathSegments[3]
 	todoID, err := uuid.Parse(todoIDString)
@@ -163,11 +163,11 @@ func deleteTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for i, t := range todos {
+	for i, t := range models.Todos {
 		if t.Id == todoID {
-			todos[i].Status = "deleted"
-			todos[i].ModifiedAt = time.Now()
-			update_History(todos[i])
+			models.Todos[i].Status = "deleted"
+			models.Todos[i].ModifiedAt = time.Now()
+			update_History(models.Todos[i])
 			break
 		}
 	}
@@ -176,13 +176,13 @@ func deleteTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func update_History(history_entry models.Todo) {
-	if history_all == nil {
-		history_all = make(map[uuid.UUID][]models.Todo)
+	if models.History_all == nil {
+		models.History_all = make(map[uuid.UUID][]models.Todo)
 	}
-	_, exists := history_all[history_entry.Id]
+	_, exists := models.History_all[history_entry.Id]
 	if !exists {
-		history_all[history_entry.Id] = make([]models.Todo, 0)
+		models.History_all[history_entry.Id] = make([]models.Todo, 0)
 	}
-	history_all[history_entry.Id] = append(history_all[history_entry.Id], history_entry)
-	fmt.Println(history_all)
+	models.History_all[history_entry.Id] = append(models.History_all[history_entry.Id], history_entry)
+	fmt.Println(models.History_all)
 }
