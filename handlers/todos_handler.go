@@ -51,7 +51,8 @@ func HandleTodoById(w http.ResponseWriter, r *http.Request) {
 	/* vars := mux.Vars(r)
 	id := vars["todoId"]
 	// Verwende die id für die entsprechende Verarbeitung
-	fmt.Fprintf(w, "HandleTodoById function called with id: %s", id) */
+	fmt.Fprintf(w, "HandleTodoById function called with id: %s", id)
+	*/
 }
 
 func getTodos(w http.ResponseWriter, r *http.Request) {
@@ -127,7 +128,6 @@ func updateTodo(w http.ResponseWriter, r *http.Request) {
 		if t.Id == todoID {
 			models.Todos[i].Title = todo.Title
 			models.Todos[i].Description = todo.Description
-			models.Todos[i].Status = todo.Status
 			models.Todos[i].Priority = todo.Priority
 			models.Todos[i].ModifiedAt = time.Now()
 			models.Todos[i].Responsibility = strings.ToLower(todo.Responsibility)

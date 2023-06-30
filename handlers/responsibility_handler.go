@@ -11,14 +11,9 @@ import (
 func HandleTodosResponsibility(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "HandleTodosResponsibility called.\n")
 	url := r.URL.Path
-	fmt.Fprint(w, url)
 
 	url_split := strings.Split(url, "/")
-	fmt.Fprint(w, url_split)
 	responsibility := url_split[4]
-	fmt.Fprint(w, responsibility)
-	fmt.Fprint(w, url_split[3])
-	fmt.Fprint(w, models.Todos)
 
 	allTodosFromResponsibility := []models.Todo{}
 	for _, t := range models.Todos {

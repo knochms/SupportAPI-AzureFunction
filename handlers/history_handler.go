@@ -13,7 +13,7 @@ import (
 func HandleHistoryById(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "HandleHistoryById called.\n")
 	urlPathSegments := strings.Split(r.URL.Path, "/")
-	todoIDString := urlPathSegments[2]
+	todoIDString := urlPathSegments[3]
 	todoID, _ := uuid.Parse(todoIDString)
 	for IdOfTodo, historieOfTodo := range models.History_all {
 		if IdOfTodo == todoID {

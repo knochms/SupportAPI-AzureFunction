@@ -13,8 +13,8 @@ func HandleTodosResponsibilityWithStatus(w http.ResponseWriter, r *http.Request)
 	url := r.URL.Path
 
 	url_split := strings.Split(url, "/")
-	responsibility := url_split[3]
-	status := url_split[5]
+	responsibility := url_split[4]
+	status := url_split[6]
 
 	allTodosFromResponsibilitywithStatus := []models.Todo{}
 	for _, t := range models.Todos {
